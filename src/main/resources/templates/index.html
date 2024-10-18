@@ -11,6 +11,20 @@
     <h2>Bem vindo ao ACEM</h2>
     <h5>Autenticação e Cadastro de Estoque em Memória</h5>
     
+    <div sec:authorize="!isAuthenticated()" class="text-center">
+        <h1 sec:authorize="!isAuthenticated()">
+            Você ainda não fez login.
+        </h1>
+        <a th:href="@{/login}" class="btn btn-success">Entrar</a>
+    </div>
+    <div sec:authorize="isAuthenticated()" class="text-center">
+        <h1 sec:authorize="isAuthenticated()">
+            Você está logado.
+        </h1>
+        <a th:href="@{/itens}" class="btn btn-primary">Ver estoque</a>
+        <a th:href="@{/logout}" class="btn btn-danger">Sair</a>
+    </div>
+    
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
