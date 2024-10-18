@@ -1,5 +1,7 @@
 package com.web2.acem.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -38,12 +40,14 @@ public class ItemController {
     }
 
     @PostMapping("/cadastrar")
+    @PreAuthorize("hasRole('ADMIN')")
     public String saveItem(@ModelAttribute Item item) {
         itemRepository.save(item);
         return "redirect:/itens";
     }
 
     @DeleteMapping("/{id}/delete")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
         if (itemRepository.findById(id).isPresent()) {
             itemRepository.deleteById(id);
@@ -51,6 +55,37 @@ public class ItemController {
         } else {
             return ResponseEntity.notFound().build(); // Retorna 404 se o item não for encontrado
         }
+    }
+
+    @GetMapping("/{id}/edit")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String formEditItem(@PathVariable Long id, Model model) {
+        Optional<Item> optionalItem = itemRepository.findById(id);
+        if (!optionalItem.isPresent()) {
+            return "redirect:/itens?itemNotFound=true";
+        }
+        Item itemOriginal = optionalItem.get();
+
+        model.addAttribute("item", itemOriginal);
+        return "itens/editForm";
+    }
+
+    @PostMapping("/{id}/edit")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String editItem(@PathVariable Long id, @ModelAttribute Item item) {
+        Optional<Item> optionalItem = itemRepository.findById(id);
+
+        if (!optionalItem.isPresent()) {
+            return "redirect:/itens?itemNotFound=true";
+        }
+
+        Item itemOriginal = optionalItem.get();
+        itemOriginal.setName(item.getName());
+        itemOriginal.setDescription(item.getDescription());
+        itemOriginal.setAmount(item.getAmount());
+        itemRepository.save(itemOriginal);
+
+        return "redirect:/itens?itemEditSuccessful=true";
     }
 
 }

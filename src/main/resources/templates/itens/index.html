@@ -47,7 +47,8 @@
                         <a th:href="@{/itens/{id}/edit(id=${item.id})}" class="btn btn-primary">
                             <i class="fa fa-edit"></i>
                         </a>
-                        <button th:onclick="'deleteItem(' + ${item.id} + ')'" type="button" onclick="deleteItem()" class="btn btn-danger">
+                        <button th:onclick="'deleteItem(' + ${item.id} + ')'" type="button" onclick="deleteItem()"
+                            class="btn btn-danger">
                             <i class="fa fa-trash"></i>
                         </button>
                     </td>
@@ -63,22 +64,34 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+
+            if (urlParams.has('itemEditSuccessful') && urlParams.get('itemEditSuccessful') === 'true') {
+                showSuccessAlert('Item editado com sucesso!');
+            }
+
+            if (urlParams.has('itemNotFound') && urlParams.get('itemNotFound') === 'true') {
+                showErrorAlert('Item não encontrado.');
+            }
+        });
+
         function deleteItem(id) {
             fetch(`/itens/${id}/delete`, {
                 method: 'DELETE'
             }).then(response => {
                 if (response.status === 204) {
-                    showSuccessAlert('Item '+id+' excluído com sucesso!');
-                    document.getElementById('linha_'+id).remove();
+                    showSuccessAlert('Item ' + id + ' excluído com sucesso!');
+                    document.getElementById('linha_' + id).remove();
                     var tbody = document.getElementById('tbody');
-                    if(tbody.children.length === 0){
+                    if (tbody.children.length === 0) {
                         tbody.innerHTML = '<tr><td colspan="6" class="text-center">Nenhum produto cadastrado</td></tr>';
                     }
                 } else {
-                    showErrorAlert('Erro ao excluir o item '+id);
+                    showErrorAlert('Erro ao excluir o item ' + id);
                 }
             }).catch(error => {
-                showErrorAlert('Erro ao excluir o item '+id);
+                showErrorAlert('Erro ao excluir o item ' + id);
             });
         }
 
