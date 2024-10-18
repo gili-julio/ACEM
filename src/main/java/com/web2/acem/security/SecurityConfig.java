@@ -27,6 +27,7 @@ public class SecurityConfig {
                                 .csrf(csrf -> csrf.disable())
                                 .authorizeHttpRequests(authorize -> authorize
                                                 .requestMatchers(HttpMethod.GET, "/").permitAll()
+                                                .requestMatchers(HttpMethod.GET, "/teste").hasRole("ADMIN")
                                                 .anyRequest().authenticated())
                                 .formLogin(form -> form
                                                 .loginPage("/login")
@@ -41,6 +42,7 @@ public class SecurityConfig {
                                                 .permitAll()
                                                 .logoutSuccessUrl("/"))
                                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
+
                 return http.build();
         }
 
