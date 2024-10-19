@@ -3,11 +3,15 @@ package com.web2.acem.controller;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.web2.acem.models.Item;
 import com.web2.acem.repository.ItemRepository;
@@ -27,8 +31,16 @@ public class ItemController {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public String listItens(Model model) {
-        model.addAttribute("itens", itemRepository.findAll());
+    public String listarItens(@RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            Model model) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Item> itensPage = itemRepository.findAll(pageable);
+
+        model.addAttribute("itens", itensPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", itensPage.getTotalPages());
         return "itens/index";
     }
 

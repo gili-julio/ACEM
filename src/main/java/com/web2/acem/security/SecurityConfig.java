@@ -34,13 +34,13 @@ public class SecurityConfig {
                                                 .usernameParameter("username")
                                                 .passwordParameter("password")
                                                 .loginProcessingUrl("/login")
-                                                .defaultSuccessUrl("/", true)
+                                                .defaultSuccessUrl("/?loginSuccessful=true", true)
                                                 .failureUrl("/login?error=true")
                                                 .permitAll())
                                 .logout(logout -> logout
                                                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                                                 .permitAll()
-                                                .logoutSuccessUrl("/"))
+                                                .logoutSuccessUrl("/?logoutSuccessful=true"))
                                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
 
                 return http.build();
