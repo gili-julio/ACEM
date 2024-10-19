@@ -7,9 +7,8 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 
-<body>
-    <h2>Bem vindo ao ACEM</h2>
-    <h5>Autenticação e Cadastro de Estoque em Memória</h5>
+<body class="bg-secondary">
+    <h5 class="text-center" style="margin-top: 15px;">Autenticação e Cadastro de Estoque em Memória</h5>
 
     <div class="text-center">
         <!-- Caixa de alerta para exibir mensagens -->
@@ -18,7 +17,7 @@
     
     <div sec:authorize="!isAuthenticated()" class="text-center">
         <h1 sec:authorize="!isAuthenticated()">
-            Você ainda não fez login.
+            Faça login para ter acesso ao estoque
         </h1>
         <a th:href="@{/login}" class="btn btn-success">Log in</a>
     </div>

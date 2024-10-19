@@ -21,10 +21,4 @@ public class HomeController {
         return "login";
     }
 
-    @GetMapping("/teste")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String telaTeste(Model model) {
-        return "teste";
-    }
-
 }
