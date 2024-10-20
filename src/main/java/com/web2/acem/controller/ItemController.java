@@ -35,12 +35,20 @@ public class ItemController {
             @RequestParam(defaultValue = "5") int size,
             Model model) {
 
+        if (page < 0) {
+            page = 0;
+        }
+
         Pageable pageable = PageRequest.of(page, size);
         Page<Item> itensPage = itemRepository.findAll(pageable);
 
         model.addAttribute("itens", itensPage.getContent());
         model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", itensPage.getTotalPages());
+        if (itensPage.getTotalPages() > 0) {
+            model.addAttribute("totalPages", itensPage.getTotalPages());
+        } else {
+            model.addAttribute("totalPages", 1);
+        }
         return "itens/index";
     }
 
